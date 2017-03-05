@@ -10,5 +10,9 @@ package com.mycompany.agenda;
  * @author Mutch
  */
 public class Pessoa {
+   //542
+    public static void main(String args[]){
+       System.out.println("");
+} 
+    }
     
-}
