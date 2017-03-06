@@ -8,8 +8,14 @@ import java.sql.SQLException;
  *
  * @author Mutch
  */
-public class Conectar {
-    public static Connection getConectar() throws SQLException, ClassNotFoundException {
+public class CriaConexao {
+
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    public static Connection getConexao() throws SQLException {
         try{
             Class.forName("com.mysql.jdbc.Driver");
             System.out.println("Conectando ao banco");

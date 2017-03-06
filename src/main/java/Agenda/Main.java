@@ -1,6 +1,6 @@
 package Agenda;
 
-import Pessoa.Banco.Conectar;
+import Pessoa.Banco.CriaConexao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -10,8 +10,8 @@ import java.sql.SQLException;
  */
 public class Main {
     public static void main(String args[]) throws SQLException, ClassNotFoundException{
-        Connection conectar = Conectar.getConectar();
-        conectar.close();
+        Connection conexao = CriaConexao.getConexao();
+        conexao.close();
         System.out.println("Desconectado do banco!");
     }
 }
