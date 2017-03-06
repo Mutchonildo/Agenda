@@ -1,6 +1,6 @@
 package Agenda;
 
-import Pessoa.Banco.CriaConexao;
+import BancoDeDados.CriaConexao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
