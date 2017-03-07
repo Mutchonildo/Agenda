@@ -33,15 +33,17 @@ public class ContatoDao {
         stmt.execute();
         stmt.close();
     }
-    public List<Contato>getLista() throws SQLException{
-        String sql = "select * from contato";
+    public List<Contato>getLista(String nome) throws SQLException{
+        String sql = "select * from contato where nome like?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
+        stmt.setString(1,nome);
         ResultSet rs = stmt.executeQuery();
         
         List<Contato> minhaLista = new ArrayList<Contato>();
         
         while(rs.next()){
             Contato c1 = new Contato();
+            c1.setId(Long.valueOf(rs.getString("Id")));
             c1.setNome(rs.getString("nome"));
             c1.setData_nasc(rs.getString("data_nasci"));
             c1.setTel(rs.getString("tel"));

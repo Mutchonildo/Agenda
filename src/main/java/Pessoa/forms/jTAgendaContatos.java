@@ -8,8 +8,15 @@ package Pessoa.forms;
 import Dao.ContatoDao;
 import Logica.Contato;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,11 +24,16 @@ import java.util.logging.Logger;
  */
 public class jTAgendaContatos extends javax.swing.JFrame {
 
+    DefaultTableModel tmContato = new DefaultTableModel(null, new String[]{"Id", "Nome", "Tel", "DataNasc", "Email"});
+    List<Contato> contatos;
+    ListSelectionModel lsmContato;
+
     /**
      * Creates new form jTAgendaContatos
      */
     public jTAgendaContatos() {
         initComponents();
+        desabilitaDados();
     }
 
     /**
@@ -53,7 +65,7 @@ public class jTAgendaContatos extends javax.swing.JFrame {
         jBSalvar = new javax.swing.JButton();
         jBSair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTTabela = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,7 +118,7 @@ public class jTAgendaContatos extends javax.swing.JFrame {
                         .addComponent(jLEmail)
                         .addGap(24, 24, 24)
                         .addComponent(jTEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(81, Short.MAX_VALUE))))
+                        .addContainerGap(94, Short.MAX_VALUE))))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTEmail, jTNome});
@@ -137,6 +149,11 @@ public class jTAgendaContatos extends javax.swing.JFrame {
         );
 
         jBProcurar.setText("Pesquisar");
+        jBProcurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBProcurarActionPerformed(evt);
+            }
+        });
 
         jBNovo.setText("Novo");
         jBNovo.addActionListener(new java.awt.event.ActionListener() {
@@ -153,6 +170,11 @@ public class jTAgendaContatos extends javax.swing.JFrame {
         });
 
         jBExcluir.setText("Excluir");
+        jBExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBExcluirActionPerformed(evt);
+            }
+        });
 
         jBSalvar.setText("Salvar");
         jBSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -194,43 +216,42 @@ public class jTAgendaContatos extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jTTabela.setModel(tmContato);
+        jTTabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        lsmContato = jTTabela.getSelectionModel();
+        lsmContato.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    jTTabelaLinhaSelecionada(jTTabela);
+                }
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(jTTabela);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jTPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBProcurar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(9, 9, 9))
+                .addGap(83, 83, 83)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(jTPesquisa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBProcurar)
+                        .addGap(9, 9, 9))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,21 +278,73 @@ public class jTAgendaContatos extends javax.swing.JFrame {
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
         // TODO add your handling code here:
+        habilitaDados();
         jTNome.setText("");
         jTTel.setText("");
         jTEmail.setText("");
         jTDataNasc.setText("");
     }//GEN-LAST:event_jBNovoActionPerformed
 
+
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
-        // TODO add your handling code here:
-        jTNome.setText("");
-        jTDataNasc.setText("");
-        jTTel.setText("");
-        jTEmail.setText("");
+        try {
+            // TODO add your handling code here:
+            alteraContato();
+            listarContatos();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Problema no jBAlterar!");
+            Logger.getLogger(jTAgendaContatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarActionPerformed
+        if (verificaDados()) {
+            cadastro();
+            desabilitaDados();
+        }
+
+
+    }//GEN-LAST:event_jBSalvarActionPerformed
+
+    private void jBProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBProcurarActionPerformed
+
+        try {
+            // TODO add your handling code here:
+            listarContatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(jTAgendaContatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBProcurarActionPerformed
+
+    private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
+        try {
+            // TODO add your handling code here:
+            excluirContato();
+            mostraPesquisa(contatos);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Erro no botão JBExcluir"+ex);
+        }
+        
+    }//GEN-LAST:event_jBExcluirActionPerformed
+    public void excluirContato() throws SQLException{
+        int resp = JOptionPane.showConfirmDialog(this, "Deseja excluir este contato?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (resp == JOptionPane.YES_NO_OPTION) {
+            ContatoDao dao = new ContatoDao();
+                dao.remove(contatos.get(jTTabela.getSelectedRow()));         
+                mostraPesquisa(contatos);
+               
+            }
+
+        }
+    
+    public void listarContatos() throws SQLException {
+        ContatoDao dao = new ContatoDao();
+        contatos = dao.getLista("%" + jTPesquisa.getText() + "%");
+        mostraPesquisa(contatos);
+    }
+
+    public void cadastro() {
+
         try {
             // TODO add your handling code here:
             Contato c1 = new Contato();
@@ -279,13 +352,54 @@ public class jTAgendaContatos extends javax.swing.JFrame {
             c1.setData_nasc(jTDataNasc.getText());
             c1.setTel(jTTel.getText());
             c1.setEmail(jTEmail.getText());
-            
+
             ContatoDao dao = new ContatoDao();
         } catch (SQLException ex) {
             Logger.getLogger(jTAgendaContatos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    }//GEN-LAST:event_jBSalvarActionPerformed
+    }
+
+    public void desabilitaDados() {
+        jTId.setEditable(false);
+        jTNome.setEditable(false);
+        jTTel.setEditable(false);
+        jTEmail.setEditable(false);
+        jTDataNasc.setEditable(false);
+    }
+
+    public void habilitaDados() {
+        jTId.setEditable(true);
+        jTNome.setEditable(true);
+        jTTel.setEditable(true);
+        jTEmail.setEditable(true);
+        jTDataNasc.setEditable(true);
+    }
+
+    public boolean verificaDados() {
+        if (!jTNome.getText().equals("") && !jTTel.getText().equals("")) {
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Campos Nome ou Telefone não preenchidos");
+            return false;
+        }
+    }
+
+    private void jTTabelaLinaSelecionada(JTable tabela) {
+        if (jTTabela.getSelectedRow() != -1) {
+            habilitaDados();
+            jTId.setText(String.valueOf(contatos.get(tabela.getSelectedRow()).getId()));
+            jTNome.setText(contatos.get(tabela.getSelectedRow()).getNome());
+            jTDataNasc.setText(contatos.get(tabela.getSelectedRow()).getData_nasc());
+            jTTel.setText(contatos.get(tabela.getSelectedRow()).getTel());
+            jTEmail.setText(contatos.get(tabela.getSelectedRow()).getEmail());
+        } else {
+            jTId.setText("");
+            jTNome.setText("");
+            jTDataNasc.setText("");
+            jTTel.setText("");
+            jTEmail.setText("");
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -342,7 +456,44 @@ public class jTAgendaContatos extends javax.swing.JFrame {
     private javax.swing.JTextField jTId;
     private javax.swing.JTextField jTNome;
     private javax.swing.JTextField jTPesquisa;
+    private javax.swing.JTable jTTabela;
     private javax.swing.JTextField jTTel;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    private void mostraPesquisa(List<Contato> contato) {
+        while (tmContato.getRowCount() > 0) {
+            tmContato.removeRow(0);
+        }
+        if (contatos.size() == 0) {
+            JOptionPane.showMessageDialog(null, "Nenhum contato no cadastrado");
+        } else {
+            String[] linha = new String[]{null, null, null, null};
+            for (int i = 0; i < contatos.size(); i++) {
+                tmContato.addRow(linha);
+                tmContato.setValueAt(contatos.get(i).getId(), i, 0);
+                tmContato.setValueAt(contatos.get(i).getNome(), i, 1);
+                tmContato.setValueAt(contatos.get(i).getData_nasc(), i, 2);
+                tmContato.setValueAt(contatos.get(i).getTel(), i, 3);
+                tmContato.setValueAt(contatos.get(i).getEmail(), i, 4);
+            }
+        }
+    }
+
+
+
+private void alteraContato() throws SQLException{
+if(jTTabela.getSelectedRow()!=-1){
+    if(verificaDados()){
+        Contato c1 = new Contato();
+        ContatoDao dao = new ContatoDao();
+        c1.setId(Long.valueOf(jTId.getText()));
+        c1.setNome(jTNome.getText());
+        c1.setData_nasc(jTDataNasc.getText());
+        c1.setTel(jTTel.getText());
+        c1.setEmail(jTEmail.getText());
+        JOptionPane.showMessageDialog(null, "Contato alterado com sucesso!");
+    }
+
+}
+}
 }
